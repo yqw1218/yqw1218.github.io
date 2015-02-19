@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[Vin's Notes]]></title>
+  
+  <link href="/atom.xml" rel="self"/>
+  <link href="http://vinnpc.github.io/"/>
+  <updated>2015-02-19T14:15:22.039Z</updated>
+  <id>http://vinnpc.github.io/</id>
+  
+  <author>
+    <name><![CDATA[Vin]]></name>
+    
+  </author>
+  
+  <generator uri="http://zespia.tw/hexo/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[初尝 Node.js CLI 工具开发]]></title>
+    <link href="http://vinnpc.github.io/2015/02/08/first-nodejs-cli-utility/"/>
+    <id>http://vinnpc.github.io/2015/02/08/first-nodejs-cli-utility/</id>
+    <published>2015-02-08T13:38:21.000Z</published>
+    <updated>2015-02-16T04:43:49.000Z</updated>
+    <content type="html"><![CDATA[<p>顺藤摸瓜是个好习惯，通俗点来说就是爱折腾。原本只想在 <a href="http://codepen.io/vinnpc/pen/xbPzoX" target="_blank" rel="external">CodePen</a> 做点小东西，由于需要用到一些图片，但又懒得找图床，于是打算将图片转换成 DataURI 使用。可时运不济，在 Google 一下的时候，风大梯子不稳，加之好奇心起，便萌生了自己做个 CLI(Command-line Interface) 工具的念头。</p>
+<h4 id="万事开头_Hello_World">万事开头 Hello World</h4>
+<p><strong>源码</strong>：<a href="https://gist.github.com/vinnpc/c3adfc507b6940072969" target="_blank" rel="external">Gist</a></p>
+<p><strong>1. 初始</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir hinpm</div><div class="line"><span class="built_in">cd</span> hinpm</div><div class="line">npm init <span class="comment"># 根据提示生成初始 package.json</span></div></pre></td></tr></table></figure>
+
+<p>不同于一般的 Node.js Library 模块， CLI 工具可在终端中直接执行，因而需在 <code>package.json</code> 中添加以下配置，其中 <code>hinpm</code> 为执行的命令， 而 <code>index.js</code> 则是用于执行的主文件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"bin"</span>: {</div><div class="line">    <span class="string">"hinpm"</span>: <span class="string">"index.js"</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<a id="more"></a>
+<p><strong>2. 主体</strong></p>
+<p>主体自然是会被执行的 <code>index.js</code>，注意第一行应先声明环境 Node 的安装所在。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">#!<span class="regexp">/usr/</span>bin/env node</div><div class="line"><span class="built_in">console</span>.log(<span class="string">'hi npm'</span>);</div></pre></td></tr></table></figure>
+
+<p><strong>3. 使用</strong></p>
+<p>执行 <code>npm install -g</code> 命令将完成的 <code>hinpm</code> 工具安装到本机执行环境中。根据结果推断，该命令有三个步骤：</p>
+<ol>
+<li>拷贝项目目录到 <code>/usr/local/lib/node_modules/</code>；</li>
+<li>为 <code>index.js</code> 添加可执行权限，即 <code>chmod +x index.js</code>；</li>
+<li>建立 <code>/usr/local/bin/hinpm</code> 和 <code>/usr/local/lib/node_modules/hinpm/index.js</code> 之间的软链接，即在终端执行 <code>hinpm</code> 时，实际上是执行了 <code>index.js</code> 文件，bin 中的可执行文件大多如此。</li>
+</ol>
+<p>安装完毕后在终端执行 <code>hinpm</code> 命令，得到输出的 <code>hi npm</code>， Hello World 便算是完成了。</p>
+<p><strong>4. 发布</strong></p>
+<p>并不建议发布将这个 Hello World 等级的包，为 NPM 增加连轮子都算不上的无用项目。不过先预习着一下总没错，毕竟以后肯定会用到。</p>
+<p>在 <a href="https://www.npmjs.com/" target="_blank" rel="external">npmjs.com</a> 中注册帐号后，执行 <code>npm adduser</code> 命令并根据提示输入用户名，密码，邮箱。配置完成后执行 <code>npm publish</code> 便能完成发布。</p>
+<p>另外，为了开源和得到用户反馈，一般会在 <code>package.json</code> 中添加 Github 和 Issues 地址。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="string">"repository"</span>: {</div><div class="line">    <span class="string">"type"</span>: <span class="string">"git"</span>,</div><div class="line">    <span class="string">"url"</span>: <span class="string">"https://github.com/....git"</span></div><div class="line">},</div><div class="line"><span class="string">"bugs"</span>: {</div><div class="line">    <span class="string">"url"</span>: <span class="string">"https://github.com/.../issues"</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+<p>而更新项目，命令同样是 <code>npm publish</code>，不过必须修改 <code>package.json</code> 中的 <code>version</code> 以达到可追溯的目的。既然提到 Version，那就一并把中途学到的 “Version 规则” Mark 一下吧。一直好奇三个数字的各自含义，现在总算解惑了。在大部分的项目中，其版本格式普遍为 <code>主版号.次版号.修订号</code>，递增规则如下</p>
+<ol>
+<li>主版号：当做出不兼容的 API 修改；</li>
+<li>次版号：当添加了向下兼容的新功能；</li>
+<li>修订号：当做出向下兼容的修正补丁；</li>
+<li>先行版本（如：alpha、beta、rc ）或版本编译资讯可通过连接符添加到最后，作为延伸。</li>
+</ol>
+<h4 id="img2data">img2data</h4>
+<p><strong>源码</strong>：<a href="https://github.com/vinnpc/img2data" target="_blank" rel="external">GitHub</a>、<a href="https://www.npmjs.com/package/img2data" target="_blank" rel="external">npm</a></p>
+<p>虽说是这才是正题，不过因为很简单，所以内容也不多，无外乎解释一下转换方法以及外援模块。</p>
+<p><strong>1. 转换</strong></p>
+<p>图片转 DataURI 的方法意外的简单。不过若要在 CSS 中使用的话，不要忘了加上前缀 <code>data:image/[format];base64,</code>。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// encode</span></div><div class="line"><span class="keyword">var</span> bitmap = fs.readFileSync(img);</div><div class="line"><span class="keyword">var</span> string = <span class="keyword">new</span> Buffer(bitmap).toString(<span class="string">'base64'</span>);</div><div class="line"><span class="comment">// decode</span></div><div class="line"><span class="keyword">var</span> buffer = <span class="keyword">new</span> Buffer(string, <span class="string">'base64'</span>);</div><div class="line">fs.writeFileSync(filename, buffer);</div></pre></td></tr></table></figure>
+
+<p><strong>2. 外援</strong></p>
+<p>在参考教程文过程中，发现不少开发 CLI 工具的开发者都有引用 <a href="https://github.com/tj/commander.js" target="_blank" rel="external">Commander</a> 作为辅助，后来才反应过来，又是 TJ 大的作品…… Commander 的作用大致为提供帮助菜单和解析终端参数。基本方法有：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> program = <span class="built_in">require</span>(<span class="string">'commander'</span>);</div><div class="line">program.version(<span class="string">'1.0.0'</span>) <span class="comment">// 设置版本号</span></div><div class="line">    .usage(<span class="string">'&lt;filenames&gt; | [options]'</span>) <span class="comment">// 输出 "Usage: img2data &lt;filenames&gt; | [options]"</span></div><div class="line">    .option(<span class="string">'-a, --all'</span>, <span class="string">'[description...]'</span>) <span class="comment">// 设置选项</span></div><div class="line">    .on(<span class="string">'--help'</span>, calback); <span class="comment">// 事件监听，在执行 `-h` 的时候调用</span></div><div class="line">program.parse(process.argv); <span class="comment">// 解析命令行参数，字符参数堆在 `program.args` 中，而选项参数则通过布尔判断，例如 `program.all`</span></div></pre></td></tr></table></figure>
+
+<h4 id="题外">题外</h4>
+<p>大概如此了，好久不写技术文，感觉还有些东西没理清，结构也不够严谨。而且写着写着发现像是在写文档一样，通俗地说是没有人味，有人味的技术文就像池建强老师的《<a href="http://read.douban.com/ebook/1531222/" target="_blank" rel="external">MacTalk·人生元编程</a>》那样，既风趣幽默又能清晰地陈述技术点。不过既然写了，就坚持写下去吧，不能一步登天，而且每人都有自己风格，逐步改进吧。|･ω･｀)</p>
+<h4 id="References">References</h4>
+<ul>
+<li><a href="http://cruft.io/posts/node-command-line-utilities/" target="_blank" rel="external">Command-line utilities with Node.js</a></li>
+<li><a href="http://weizhifeng.net/how-to-publish-a-node-module.html" target="_blank" rel="external">如何发布Node模块到NPM社区</a></li>
+<li><a href="http://semver.org/lang/zh-TW/" target="_blank" rel="external">Semantic Versioning 2.0.0 / 语意化版本 2.0.0</a></li>
+<li><a href="https://docs.npmjs.com/cli/" target="_blank" rel="external">NPM CLI Commands</a></li>
+<li><a href="http://www.geekpark.net/topics/198213" target="_blank" rel="external">不仅仅是空格的问题——再谈中西文混排</a> （是的，纠结了不少时间= =）</li>
+</ul>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>顺藤摸瓜是个好习惯，通俗点来说就是爱折腾。原本只想在 <a href="http://codepen.io/vinnpc/pen/xbPzoX" target="_blank" rel="external">CodePen</a> 做点小东西，由于需要用到一些图片，但又懒得找图床，于是打算将图片转换成 DataURI 使用。可时运不济，在 Google 一下的时候，风大梯子不稳，加之好奇心起，便萌生了自己做个 CLI(Command-line Interface) 工具的念头。</p>
+<h4 id="万事开头_Hello_World">万事开头 Hello World</h4>
+<p><strong>源码</strong>：<a href="https://gist.github.com/vinnpc/c3adfc507b6940072969" target="_blank" rel="external">Gist</a></p>
+<p><strong>1. 初始</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">mkdir hinpm</div><div class="line"><span class="built_in">cd</span> hinpm</div><div class="line">npm init <span class="comment"># 根据提示生成初始 package.json</span></div></pre></td></tr></table></figure>
+
+<p>不同于一般的 Node.js Library 模块， CLI 工具可在终端中直接执行，因而需在 <code>package.json</code> 中添加以下配置，其中 <code>hinpm</code> 为执行的命令， 而 <code>index.js</code> 则是用于执行的主文件。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="string">"bin"</span>: {</div><div class="line">    <span class="string">"hinpm"</span>: <span class="string">"index.js"</span></div><div class="line">}</div></pre></td></tr></table></figure>
+
+]]>
+    
+    </summary>
+    
+      <category term="node.js" scheme="http://vinnpc.github.io/tags/node-js/"/>
+    
+      <category term="npm" scheme="http://vinnpc.github.io/tags/npm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title><![CDATA[Hello Hexo]]></title>
+    <link href="http://vinnpc.github.io/2015/02/01/hello-hexo/"/>
+    <id>http://vinnpc.github.io/2015/02/01/hello-hexo/</id>
+    <published>2015-02-01T02:10:20.000Z</published>
+    <updated>2015-02-16T04:45:03.000Z</updated>
+    <content type="html"><![CDATA[<p>已经无法数清这是第几次写 Hello Blog 了，每次开新博客都避免不了在第一篇文章呻吟一下从大二以来的开通博客，服务商被墙，自建博客，四海为家，最后文章尽丢，写博客的习惯也随之中断的历程，而这次，就一笔带过吧。</p>
+<p>后来虽有重开博客的打算，可自以为实力不足，便不献丑写博客，在 Evernote 里写点笔记算了。不过后来发现，写博客是一种压力，也是一种动力。记笔记自己了解就行了，客写博客却要分析个明白、有条理、有来源，好比 “小黄鸭/凛/大河/[若干略]Debug法”，如此一来顺藤摸瓜地各种查阅，写一篇博客既巩固了所学，也吸收了新知识，何乐不为。这也说明了为何有些博主写一篇文章写上一天甚至几天，里面的可都是实实在在的经验心得。</p>
+<p>新博客的主题来自博主 <a href="http://notes.iissnan.com/" target="_blank" rel="external">iissnan</a> 的自建主题 <a href="https://github.com/iissnan/hexo-theme-next/" target="_blank" rel="external">NexT</a>。初次遇见的时候甚是喜欢，简洁、留白、舒适，由各种细节的组合无法一言概括。在我也有灵感写出自己的主题之前，就先借来鞭策自己吧。</p>
+<p>从来都不是多言之人，第一篇也就此结束吧。希望以后能坚持写下去，将各种经验心得凝聚成文，既用于记录，也希望能多少帮到他人。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>已经无法数清这是第几次写 Hello Blog 了，每次开新博客都避免不了在第一篇文章呻吟一下从大二以来的开通博客，服务商被墙，自建博客，四海为家，最后文章尽丢，写博客的习惯也随之中断的历程，而这次，就一笔带过吧。</p>
+<p>后来虽有重开博客的打算，可自以为实力不足，便]]>
+    </summary>
+    
+      <category term="hexo" scheme="http://vinnpc.github.io/tags/hexo/"/>
+    
+  </entry>
+  
+</feed>
