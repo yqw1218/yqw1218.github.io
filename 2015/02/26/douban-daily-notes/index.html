@@ -2,8 +2,6 @@
 <html class="theme-next use-motion">
 <head>
   
-    
-
 
 <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -28,11 +26,11 @@
 
 
 
-  <title> Archive // Vin's Notes </title>
+  <title> Douban Daily 开发小记 // Vin's Notes </title>
 </head>
 
 <body>
-  <div class="container one-column  page-archive ">
+  <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -94,34 +92,9 @@
             
           
 
-          <div id="posts" class="posts-collapse">
+          <div id="posts" class="posts-expand">
             
-
-  <span class="archive-move-on"></span>
-
-  <span class="archive-page-counter">
-    
-    
-     
-    
-    Um..! 3 posts in total. Keep on posting.
-  </span>
-
   
-
-    
-    
-    
-
-    
-      
-      <div class="collection-title">
-        <h2 class="archive-year motion-element" id="archive-year-2015">2015</h2>
-      </div>
-    
-    
-
-    
 
   <div class="post post-type-normal ">
     <div class="post-header">
@@ -132,9 +105,7 @@
           
           
             
-              <a class="post-title-link" href="/2015/02/26/douban-daily-notes/">
-                Douban Daily 开发小记
-              </a>
+              Douban Daily 开发小记
             
           
         </h1>
@@ -143,7 +114,7 @@
       <div class="post-meta">
           <span class="post-time">
             
-              02-26
+              Posted on 2015-02-26
             
           </span>
         <!--
@@ -160,120 +131,92 @@
     </div>
 
     
+      <div class="post-body">
 
+        
+        
+
+        
+          <p>总算克服了拖延症（才怪），完成豆瓣一刻网页版的第一版并部署到 Coding.net 上，先来水一文。</p>
+<p>访问地址： <a href="http://doubandaily.coding.io/" target="_blank" rel="external">http://doubandaily.coding.io/</a></p>
+<p>源码地址： <a href="http://doubandaily.coding.io/" target="_blank" rel="external">Github</a> / <a href="coding.net/u/vinnpc/p/douban-daily/git">Coding</a></p>
+<h4 id="涉及技术点">涉及技术点</h4>
+<ul>
+<li>前端：<ul>
+<li>Angular.js, Sass</li>
+</ul>
+</li>
+<li>后端：<ul>
+<li>CoffeeScript, Restify, Async, Mongodb</li>
+</ul>
+</li>
+<li>自动化：<ul>
+<li>Bower, Gulp</li>
+</ul>
+</li>
+</ul>
+<h4 id="薛定谔的_AngularJS">薛定谔的 AngularJS</h4>
+<p>其实 Angular.js 至今也只算是入了门，这次的练手可以说是 <a href="http://todomvc.com/examples/angularjs/" target="_blank" rel="external">TodoMVC</a> 的基础上改造出来的，所以在自带函数使用、变量状态、变量范围等等方面都有很多仍未了解的的地方，目前只能通过 Console 输出来摸索其规律。在使用了这么一小段时间后，目前对 Angular.js 的感触略微复杂，佩服他的强大，但也畏惧的他重型，毕竟尝尝以轻量控自居。使用的时候就像是背着沉重的看不见里头的箱子走路，边走边企图猜测里面的猫的存活状态。也许随着经验的增加，黑箱子会逐渐透明吧。</p>
+<h4 id="简洁的_Autoprefixer">简洁的 Autoprefixer</h4>
+<p>除非写复杂的 Mixin，使用 Sass 已经没什么压力了。值得一提的是，这次放弃了 Compass 转而尝试使用 <a href="https://github.com/postcss/autoprefixer" target="_blank" rel="external">Autoprefixer</a>，而事实也证明这个抉择是正确的。 Autoprefixer 生成的代码比 Compass 的简洁不少，同时也减少了一些输入。</p>
+<h4 id="迷失在异步">迷失在异步</h4>
+<p>Node.js 后端依旧容易一不小心就迷失在回调和异步当中，虽然有使用 <code>async.map</code> 来控制异步，但是由于 <a href="http://tietuku.com/" target="_blank" rel="external">贴图库</a> 图床在接受大量异步请求时会返回 <code>503</code>，所以不得不改为 <code>async.series</code> 同步执行函数。另外，而在搜索同步执行的时候，偶遇了 <a href="https://www.promisejs.org/" target="_blank" rel="external">Promises</a> 概念以及衍生的 JS 库 <a href="https://github.com/kriskowal/q" target="_blank" rel="external">Q</a>，打算在 Douban Daily Ver2 中尝试，也许以后能单独写篇学习笔记了。</p>
+<h4 id="省心的自动化">省心的自动化</h4>
+<p>自动化工具在之前只处于 Hello World 阶段，而在这次练手中算是体会到了其便利，放心将静态资源丢给 Gulp 后台管理，专心做好逻辑即可。不过 Bower 令人诟病的一点是它下载了整个源码，而实际可用文件大概也就 <code>min.css</code> 和 <code>min.js</code>。所幸后来找到了 <a href="https://github.com/ck86/main-bower-files" target="_blank" rel="external">main-bower-files</a>，结合 Gulp 将所需文件拷贝到静态资源目录中，例如从 <code>bower_components</code> 拷贝到 <code>vendor</code>，同时 ignore <code>bower_components</code>。使用例子可见 Douban Daily 中的 <a href="https://github.com/vinnpc/douban-daily/blob/master/public/gulpfile.js" target="_blank" rel="external">bower.json</a> 和 <a href="https://github.com/vinnpc/douban-daily/blob/master/public/gulpfile.js" target="_blank" rel="external">gulpfile.js</a>。</p>
+<h4 id="结语">结语</h4>
+<p>篇幅有限（其实是写不下，思路也未清晰）就不多说了，继续改进吧。</p>
+<p><strong>TODO</strong></p>
+<ul>
+<li>改进 UI 细节。</li>
+<li>再研究 Angular.js 的运行模式，整理结构分离代码。</li>
+<li>学习 Promises 概念和尝试用 Q 库重构爬虫部分代码。</li>
+</ul>
+
+        
+
+      </div>
+    
+
+    
+      <div class="post-footer">
+        
+          <div class="post-tags">
+            
+              <a href="/tags/angular-js/">
+                #angular.js
+              </a>
+            
+              <a href="/tags/node-js/">
+                #node.js
+              </a>
+            
+              <a href="/tags/automation/">
+                #automation
+              </a>
+            
+              <a href="/tags/douban/">
+                #douban
+              </a>
+            
+          </div>
+        
+
+        
+
+        
+      </div>
     
   </div>
 
 
 
   
-
+    <div class="comments" id="comments">
     
+      <div id="disqus_thread">
+        <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     
-    
-
-    
-    
-
-    
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/02/08/first-nodejs-cli-utility/">
-                初尝 Node.js CLI 工具开发
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-          <span class="post-time">
-            
-              02-08
-            
-          </span>
-        <!--
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/02/08/first-nodejs-cli-utility/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/02/08/first-nodejs-cli-utility/"></span>
-            </a>
-          </span>
-          
-        -->
-      </div>
     </div>
-
-    
-
-    
-  </div>
-
-
-
-  
-
-    
-    
-    
-
-    
-    
-
-    
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/02/01/hello-hexo/">
-                Hello Hexo
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-          <span class="post-time">
-            
-              02-01
-            
-          </span>
-        <!--
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/02/01/hello-hexo/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/02/01/hello-hexo/"></span>
-            </a>
-          </span>
-          
-        -->
-      </div>
-    </div>
-
-    
-
-    
-  </div>
-
-
-
   
 
           </div>
@@ -293,6 +236,15 @@
 <div id="sidebar" class="sidebar">
   <div class="sidebar-inner">
 
+    
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-overview" data-target="site-overview">
+          Overview
+        </li>
+        <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc">
+          Table Of Contents
+        </li>
+      </ul>
     
 
     <div class="site-overview">
@@ -357,6 +309,10 @@
 
     </div>
 
+    
+      <div class="post-toc sidebar-panel-active">
+        <ol class="motion-element"><li class="motion-element-item motion-element-level-4"><a class="motion-element-link" href="#涉及技术点"><span class="motion-element-number">1.</span> <span class="motion-element-text">涉及技术点</span></a></li><li class="motion-element-item motion-element-level-4"><a class="motion-element-link" href="#薛定谔的_AngularJS"><span class="motion-element-number">2.</span> <span class="motion-element-text">薛定谔的 AngularJS</span></a></li><li class="motion-element-item motion-element-level-4"><a class="motion-element-link" href="#简洁的_Autoprefixer"><span class="motion-element-number">3.</span> <span class="motion-element-text">简洁的 Autoprefixer</span></a></li><li class="motion-element-item motion-element-level-4"><a class="motion-element-link" href="#迷失在异步"><span class="motion-element-number">4.</span> <span class="motion-element-text">迷失在异步</span></a></li><li class="motion-element-item motion-element-level-4"><a class="motion-element-link" href="#省心的自动化"><span class="motion-element-number">5.</span> <span class="motion-element-text">省心的自动化</span></a></li><li class="motion-element-item motion-element-level-4"><a class="motion-element-link" href="#结语"><span class="motion-element-number">6.</span> <span class="motion-element-text">结语</span></a></li></ol>
+      </div>
     
   </div>
 </div>
@@ -512,7 +468,40 @@
   
   
     <script type="text/javascript">
-      $('.archive-year').velocity('transition.slideLeftIn');
+      $(document).ready(function () {
+        var html = $('html');
+
+        $('.sidebar-nav li').on('click', function () {
+          var item = $(this);
+          var activeTabClassName = 'sidebar-nav-active';
+          var activePanelClassName = 'sidebar-panel-active';
+          if (item.hasClass(activeTabClassName)) {
+            return;
+          }
+
+          var currentTarget = $('.' + activePanelClassName);
+          var target = $('.' + item.data('target'));
+
+          currentTarget.velocity('transition.slideUpOut', 200, function () {
+            target
+              .velocity('stop')
+              .velocity('transition.slideDownIn', 200)
+              .addClass(activePanelClassName);
+          });
+
+          item.siblings().removeClass(activeTabClassName);
+          item.addClass(activeTabClassName);
+        });
+
+        $('.post-toc a').on('click', function (e) {
+          e.preventDefault();
+          var offset = $(this.getAttribute('href')).offset().top;
+          html.velocity('stop').velocity('scroll', {
+            offset: offset  + 'px',
+            mobileHA: false
+          });
+        });
+      });
     </script>
   
 
@@ -522,6 +511,25 @@
   
   
 
+  
+
+    
+      
+    
+
+    <script type="text/javascript">
+      var disqus_shortname = 'vinnpc';
+      var disqus_identifier = '2015/02/26/douban-daily-notes/';
+      var disqus_url = 'http://vinnpc.github.io/2015/02/26/douban-daily-notes/';
+
+      (function(){
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+      }());
+    </script>
   
 
 
